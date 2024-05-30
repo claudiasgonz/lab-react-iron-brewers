@@ -1,21 +1,30 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Search from "../components/Search";
-import beersJSON from "./../assets/beers.json";
 
+import axios from 'axios';
 
 
 function AllBeersPage() {
   // Mock initial state, to be replaced by data from the API. Once you retrieve the list of beers from the Beers API store it in this state variable.
-  const [beers, setBeers] = useState(beersJSON);
-
-
+  const [beers, setBeers] = useState(null);
 
   // TASKS:
   // 1. Set up an effect hook to make a request to the Beers API and get a list with all the beers.
   // 2. Use axios to make a HTTP request.
   // 3. Use the response data from the Beers API to update the state variable.
+    useEffect(() => {
+      const getAllBeers = async () => {
+        try {
+          const response = await axios.get(`https://ih-beers-api2.herokuapp.com/beers`)
 
+          setBeers(response.data)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      getAllBeers();
+    }, []);
 
 
   // The logic and the structure for the page showing the list of beers. You can leave this as it is for now.
@@ -32,9 +41,9 @@ function AllBeersPage() {
                   <div className="card m-2 p-2 text-center" style={{ width: "24rem", height: "18rem" }}>
                     <div className="card-body">
                       <img
-                        src={beer.image_url}
+                        src={"https://as2.ftcdn.net/v2/jpg/01/37/90/69/1000_F_137906955_C5yYUJG5qEdDIpd73ll2WEAtVI96sCqu.jpg"}
                         style={{ height: "6rem" }}
-                        alt={"image of" + beer.name}
+                        alt={"Stock image of beer"}
                       />
                       <h5 className="card-title text-truncate mt-2">{beer.name}</h5>
                       <h6 className="card-subtitle mb-3 text-muted">
@@ -55,3 +64,6 @@ function AllBeersPage() {
 }
 
 export default AllBeersPage;
+
+
+
